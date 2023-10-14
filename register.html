@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Registration</h1>
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" action="/register" enctype="multipart/form-data" id="registration-form">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br>
 
@@ -15,7 +15,25 @@
         <label for="image">Image for Authentication:</label>
         <input type="file" id="image" name="image" accept="image/*" required><br>
 
-        <input type="submit" value="Register">
+        <input type="submit" value="Register" id="register-button">
     </form>
+
+    <script>
+        // Add an event listener to the form submission
+        document.getElementById('registration-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            // Get the input values
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Save login credentials to localStorage
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+
+            // Redirect to the success page
+            window.location.href = '/success.html';
+        });
+    </script>
 </body>
 </html>

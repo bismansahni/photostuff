@@ -1,49 +1,29 @@
-from flask import Flask, request, render_template, session, redirect, url_for
-import hashlib
+from flask import Flask, request, render_template, redirect, url_for
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
 
-# Dummy database for user data
-users = {
-    'username1': {
-        'password': 'hashed_password1',
-        'image_hash': 'hashed_image_data1'
-    },
-    'username2': {
-        'password': 'hashed_password2',
-        'image_hash': 'hashed_image_data2'
-    }
-}
+# A list to store registration data (in-memory storage, not suitable for production)
+registration_data = []
 
-# Route for user registration
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        password = hashlib.sha256(request.form['password'].encode()).hexdigest()
-        image_hash = hashlib.sha256(request.form['image'].read()).hexdigest()
-        users[username] = {'password': password, 'image_hash': image_hash}
-        return redirect('/login')
+        password = request.form['password']
+        image = request.files['image']
+
+        # You can process and store the data as needed here
+        # For simplicity, we'll just store it in a list
+        registration_data.append({'username': username, 'password': password, 'image': image.filename})
+
+        # Redirect to a success page
+        return redirect(url_for('success'))
+
     return render_template('register.html')
 
-# Route for user login
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = hashlib.sha256(request.form['password'].encode()).hexdigest()
-        if username in users and users[username]['password'] == password:
-            session['authenticated'] = True
-            return redirect('/dashboard')
-    return render_template('login.html')
-
-# Route for the dashboard
-@app.route('/dashboard')
-def dashboard():
-    if not session.get('authenticated'):
-        return redirect('/login')
-    return 'Welcome to the dashboard!'
+@app.route('/success')
+def success():
+    return render_template('success.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

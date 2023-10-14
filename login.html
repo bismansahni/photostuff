@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="POST" action="/login" id="login-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <input type="submit" value="Login" id="login-button">
+    </form>
+
+    <script>
+        // Add an event listener to the form submission
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            // Get the input values
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Retrieve stored credentials from localStorage
+            const storedUsername = localStorage.getItem('username');
+            const storedPassword = localStorage.getItem('password');
+
+            // Check if the entered credentials match the stored credentials
+            if (username === storedUsername && password === storedPassword) {
+                // Redirect to the success page if credentials match
+                window.location.href = '/loginsuccess.html';
+            } else {
+                // Display an error message if credentials do not match
+                alert('Invalid username or password. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
